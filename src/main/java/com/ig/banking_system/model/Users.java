@@ -29,12 +29,11 @@ public class Users extends BaseEntity {
 	private String password;
 	private String phoneNumber;
 	private Boolean active;
-	@BatchSize(size = 10)
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<Role> roles;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "role_id", nullable = true)
+	private Role role;
 
-	public Users(Long id, String firstName, String lastName, String email, String username, String password, String phoneNumber, Set<Role> roles) {
+	public Users(Long id, String firstName, String lastName, String email, String username, String password, String phoneNumber, Role role) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -42,7 +41,7 @@ public class Users extends BaseEntity {
 		this.username = username;
 		this.password = password;
 		this.phoneNumber = phoneNumber;
-		this.roles = roles;
+		this.role = role;
 	}
 
 	public UserListDto toUserListDto() {

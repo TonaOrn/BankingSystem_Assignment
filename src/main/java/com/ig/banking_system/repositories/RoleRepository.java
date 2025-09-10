@@ -14,8 +14,8 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
     SELECT DISTINCT p.*
     FROM permission p
              INNER JOIN role_permission rp ON rp.permission_id = p.id
-             INNER JOIN user_role ur ON ur.role_id = rp.role_id
-    WHERE ur.user_id = :userId
+             INNER JOIN users u ON u.role_id = rp.role_id
+    WHERE u.id = :userId
     """, nativeQuery = true)
     public List<Permission> getRolePermissionByUser(Long userId);
 }
