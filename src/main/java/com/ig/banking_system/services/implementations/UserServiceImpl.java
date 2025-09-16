@@ -1,14 +1,14 @@
 package com.ig.banking_system.services.implementations;
 
 import com.ig.banking_system.base.response.MessageResponse;
-import com.ig.banking_system.dto.LogInReqDto;
-import com.ig.banking_system.dto.LoginDto;
-import com.ig.banking_system.dto.RegisterUserDto;
-import com.ig.banking_system.dto.UserDto;
+import com.ig.banking_system.dto.auth.LogInReqDto;
+import com.ig.banking_system.dto.auth.LoginDto;
+import com.ig.banking_system.dto.auth.RegisterUserDto;
+import com.ig.banking_system.dto.previlleges.UserDto;
 import com.ig.banking_system.exceptions.ApiErrorException;
-import com.ig.banking_system.model.Users;
-import com.ig.banking_system.repositories.RoleRepository;
-import com.ig.banking_system.repositories.UserRepository;
+import com.ig.banking_system.model.previlleges.Users;
+import com.ig.banking_system.repositories.previleges.RoleRepository;
+import com.ig.banking_system.repositories.previleges.UserRepository;
 import com.ig.banking_system.security.payload.UserPrinciple;
 import com.ig.banking_system.services.UserService;
 import com.ig.banking_system.utilities.jwt.JwtUtil;
@@ -22,6 +22,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -57,6 +58,13 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public RegisterUserDto registerUser(Users req) {
+		if (userRepository.existsByUsernameIgnoreCaseAndStatusTrue(req.getUsername())) {
+			throw new ApiErrorException(400, "Username already exists");
+		}
+
+		if (userRepository.existsByEmailIgnoreCaseAndStatusTrue(req.getEmail())) {
+			throw new ApiErrorException(400, "Email already exists");
+		}
 		req.setPassword(passwordEncoder.encode(req.getPassword()));
 		var user = userRepository.save(req);
 		var userPermission = roleRepository.getRolePermissionByUser(user.getId());
@@ -68,10 +76,23 @@ public class UserServiceImpl implements UserService {
 		return new RegisterUserDto(user.getId(), user.getFirstName(), user.getLastName(), user.getUsername(), user.getEmail(), token);
 	}
 
+	@Override
+	public Users getUserDetail(long id) {
+		return userRepository.findByIdAndStatusTrue(id).orElseThrow(() -> new ApiErrorException(404, "User not found"));
+	}
+
 	@Transactional
 	@Override
 	public MessageResponse updateUser(Long id, UserDto req) {
 		final var user = userRepository.findByIdAndStatusTrue(id).orElseThrow(() -> new ApiErrorException(404, "User not found"));
+		if (userRepository.existsByUsernameIgnoreCaseAndStatusTrueAndIdNot(user.getUsername(), id)) {
+			throw new ApiErrorException(400, "Username already exists");
+		}
+
+		if (userRepository.existsByEmailIgnoreCaseAndIdNot(user.getEmail(), id)) {
+			throw new ApiErrorException(400, "Email already exists");
+		}
+
 		var userUpdated = req.updateUser(user);
 		userRepository.save(userUpdated);
 		return new MessageResponse();

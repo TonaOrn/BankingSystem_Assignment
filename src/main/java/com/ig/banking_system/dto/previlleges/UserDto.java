@@ -1,8 +1,10 @@
-package com.ig.banking_system.dto;
+package com.ig.banking_system.dto.previlleges;
 
-import com.ig.banking_system.model.Role;
-import com.ig.banking_system.model.Users;
+import com.ig.banking_system.model.previlleges.Role;
+import com.ig.banking_system.model.previlleges.Users;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +18,7 @@ public class UserDto {
 	private Long id;
 	private String firstName;
 	private String lastName;
+	@Email(message = "Invalid email format")
 	@NotBlank
 	private String email;
 	@NotBlank
@@ -36,5 +39,9 @@ public class UserDto {
 		u.setEmail(email);
 		u.setRole(role);
 		return u;
+	}
+
+	public UserViewDto toUserViewDto() {
+		return new UserViewDto(id, firstName, lastName, username);
 	}
 }

@@ -1,4 +1,4 @@
-package com.ig.banking_system.dto;
+package com.ig.banking_system.dto.auth;
 
 import jakarta.validation.constraints.NotBlank;
 

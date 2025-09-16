@@ -1,4 +1,4 @@
-package com.ig.banking_system.model;
+package com.ig.banking_system.model.previlleges;
 
 import com.ig.banking_system.base.model.BaseEntity;
 import jakarta.persistence.*;

@@ -1,10 +1,10 @@
 package com.ig.banking_system.controllers;
 
 import com.ig.banking_system.base.response.ObjectResponse;
-import com.ig.banking_system.dto.LogInReqDto;
-import com.ig.banking_system.dto.LoginDto;
-import com.ig.banking_system.dto.RegisterUserDto;
-import com.ig.banking_system.dto.UserDto;
+import com.ig.banking_system.dto.auth.LogInReqDto;
+import com.ig.banking_system.dto.auth.LoginDto;
+import com.ig.banking_system.dto.auth.RegisterUserDto;
+import com.ig.banking_system.dto.previlleges.UserDto;
 import com.ig.banking_system.services.UserService;
 import com.ig.banking_system.utilities.constants.Constant;
 import jakarta.validation.Valid;

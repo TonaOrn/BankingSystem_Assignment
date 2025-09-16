@@ -1,7 +1,7 @@
-package com.ig.banking_system.repositories;
+package com.ig.banking_system.repositories.previleges;
 
-import com.ig.banking_system.model.Permission;
-import com.ig.banking_system.model.Role;
+import com.ig.banking_system.model.previlleges.Permission;
+import com.ig.banking_system.model.previlleges.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package com.ig.banking_system.model;
+package com.ig.banking_system.model.previlleges;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

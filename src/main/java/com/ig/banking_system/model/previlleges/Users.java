@@ -1,16 +1,14 @@
-package com.ig.banking_system.model;
+package com.ig.banking_system.model.previlleges;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ig.banking_system.base.model.BaseEntity;
-import com.ig.banking_system.dto.UserListDto;
+import com.ig.banking_system.dto.previlleges.UserListDto;
+import com.ig.banking_system.dto.previlleges.UserViewDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.BatchSize;
-
-import java.util.Set;
 
 @Entity
 @Setter
@@ -44,7 +42,16 @@ public class Users extends BaseEntity {
 		this.role = role;
 	}
 
+	public Users(Long id, String username) {
+		this.id = id;
+		this.username = username;
+	}
+
 	public UserListDto toUserListDto() {
 		return new UserListDto(id, firstName, lastName, username, email);
+	}
+
+	public UserViewDto toUserViewDto() {
+		return new UserViewDto(id, firstName, lastName, username);
 	}
 }

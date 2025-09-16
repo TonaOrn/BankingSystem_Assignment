@@ -1,5 +1,6 @@
 package com.ig.banking_system.base.model;
 
+import com.ig.banking_system.model.previlleges.Users;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,12 @@ public class BaseEntity {
     private Date createdDate;
     @LastModifiedDate
     private Date updatedDate;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "created_by")
+	private Users createdBy;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "updated_by")
+	private Users updatedBy;
 
     @PrePersist
     public void onInsert() {
