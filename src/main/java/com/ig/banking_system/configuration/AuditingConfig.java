@@ -1,8 +1,10 @@
 package com.ig.banking_system.configuration;
 
 import com.ig.banking_system.model.previlleges.Users;
+import com.ig.banking_system.security.payload.Context;
 import com.ig.banking_system.security.payload.UserPrinciple;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -11,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
 
+@Slf4j
 @Configuration
 @EnableJpaAuditing
 public class AuditingConfig implements AuditorAware<Users> {
@@ -28,7 +31,8 @@ public class AuditingConfig implements AuditorAware<Users> {
 		if (auth == null || !auth.isAuthenticated() || auth instanceof AnonymousAuthenticationToken) {
 			return Optional.empty();
 		}
-		final var userPrincipal = (UserPrinciple) auth.getPrincipal();
+		log.info("Current user: {}", auth.getPrincipal());
+		final var userPrincipal = (Context) auth.getPrincipal();
 		return Optional.of(new Users(userPrincipal.getId(), userPrincipal.getUsername()));
 	}
 

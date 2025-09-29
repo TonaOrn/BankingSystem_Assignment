@@ -15,7 +15,6 @@ import java.util.Date;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class TransactionReqDto {
-	private Long id;
 	private String transactionRef;
 	private TransactionTypeEnum transactionType;
 	private BigDecimal amount;
@@ -24,6 +23,6 @@ public class TransactionReqDto {
 	private String toAccountNumber;
 
 	public Transactions toTransaction() {
-		return new Transactions(id, transactionRef, transactionType, amount, accountNumber, fromAccountNumber, toAccountNumber, new Date(), null);
+		return new Transactions(null, transactionRef, transactionType, amount, accountNumber, fromAccountNumber, toAccountNumber, new Date(), null);
 	}
 }

@@ -1,11 +1,16 @@
 package com.ig.banking_system.utilities.jwt;
 
+import com.ig.banking_system.security.payload.Context;
 import com.ig.banking_system.security.payload.UserPrinciple;
+import com.ig.banking_system.utilities.shared.JsonUtility;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
@@ -18,11 +23,18 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Component
+@RequiredArgsConstructor
 public class JwtUtil {
     @Value("${jwt.secret}")
     private String secret;
     @Value("${jwt.expiration}") // 24 hours in seconds
     private Long expiration;
+
+	private final JsonUtility json;
+
+	public Context context(String subject) {
+		return json.parse(subject, Context.class);
+	}
 
     private SecretKey getSigningKey() {
         var keyBytes = Decoders.BASE64.decode(secret);
@@ -31,8 +43,9 @@ public class JwtUtil {
 
     public String generateToken(UserPrinciple user) {
         Map<String, List<String>> claims = new HashMap<>();
+	    final var context = json.toString(Context.from(user));
         claims.put("authorities", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
-        return createToken(claims, user.getUsername());
+        return createToken(claims, context);
     }
 
     private String createToken(Map<String, List<String>> claims, String subject) {

@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.util.Date;
@@ -25,9 +27,11 @@ public class BaseEntity {
     private Date createdDate;
     @LastModifiedDate
     private Date updatedDate;
+	@CreatedBy
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "created_by")
 	private Users createdBy;
+	@LastModifiedBy
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "updated_by")
 	private Users updatedBy;

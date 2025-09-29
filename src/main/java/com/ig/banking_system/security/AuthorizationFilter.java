@@ -26,50 +26,52 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthorizationFilter extends OncePerRequestFilter {
 
-    private final JwtUtil jwt;
+	private final JwtUtil jwt;
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
-        var requestTokenHeader = request.getHeader("Authorization");
-        Claims claim = null;
-        String jwtToken;
-        String invalid = null;
-        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
-            jwtToken = requestTokenHeader.substring(7);
-            try {
-                claim = jwt.getAllClaimsFromToken(jwtToken);
-            } catch (IllegalArgumentException e) {
-                invalid = "Invalid session";
-            } catch (ExpiredJwtException e) {
-                invalid = "Session has been expired";
-            } catch (MalformedJwtException | SignatureException e) {
-                invalid = e.getMessage();
-            }
-        }
+	@Override
+	protected void doFilterInternal(HttpServletRequest request,
+	                                @NonNull HttpServletResponse response,
+	                                @NonNull FilterChain filterChain) throws ServletException, IOException {
+		var requestTokenHeader = request.getHeader("Authorization");
+		Claims claim = null;
+		String jwtToken;
+		String invalid = null;
+		if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
+			jwtToken = requestTokenHeader.substring(7);
+			try {
+				claim = jwt.getAllClaimsFromToken(jwtToken);
+			} catch (IllegalArgumentException e) {
+				invalid = "Invalid session";
+			} catch (ExpiredJwtException e) {
+				invalid = "Session has been expired";
+			} catch (MalformedJwtException | SignatureException e) {
+				invalid = e.getMessage();
+			}
+		}
 
-        if (invalid != null) {
-            request.setAttribute("invalid", invalid);
-        } else {
-            if (claim != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+		if (invalid != null) {
+			request.setAttribute("invalid", invalid);
+		} else {
+			if (claim != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 /*
                   if token is valid configure Spring Security to manually set authentication */
-                // Retrieve the authorities as List<?> first
-                List<?> authoritiesList = claim.get("authorities", List.class);
+				// Retrieve the authorities as List<?> first
+				List<?> authoritiesList = claim.get("authorities", List.class);
 
-                // Then map it to List<SimpleGrantedAuthority>
-                List<SimpleGrantedAuthority> authorities = authoritiesList.stream()
-                        .map(String.class::cast) // Cast each element to String
-                        .map(SimpleGrantedAuthority::new) // Convert to SimpleGrantedAuthority
-                        .toList();
-                var usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(claim.getSubject(), request, authorities);
+				// Then map it to List<SimpleGrantedAuthority>
+				List<SimpleGrantedAuthority> authorities = authoritiesList.stream()
+						.map(String.class::cast) // Cast each element to String
+						.map(SimpleGrantedAuthority::new) // Convert to SimpleGrantedAuthority
+						.toList();
+				var usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(jwt.context(claim.getSubject()), request, authorities);
                 /*
                   After setting the Authentication in the context, we specify
                   that the current user is authenticated. So it passes the
                   Spring Security Configurations successfully.
                  */
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-            }
-        }
-        filterChain.doFilter(request, response);
-    }
+				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+			}
+		}
+		filterChain.doFilter(request, response);
+	}
 }

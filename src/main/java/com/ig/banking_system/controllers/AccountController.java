@@ -63,7 +63,7 @@ public class AccountController {
 	/**
 	 * Withdrawal
 	 **/
-	@PostMapping("/deposit")
+	@PostMapping("/withdraw")
 	public MessageResponse withdrawal(@Valid @RequestBody WithdrawalReqDto req) {
 		return accountService.withdrawal(req);
 	}
