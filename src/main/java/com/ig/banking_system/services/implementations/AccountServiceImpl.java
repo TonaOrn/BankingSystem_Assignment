@@ -36,6 +36,9 @@ public class AccountServiceImpl implements AccountService {
 	@Transactional
 	@Override
 	public AccountViewDto registerAccount(Account req) {
+		if (accountRepository.existsByNationalIdAndStatusTrue(req.getNationalId())) {
+			throw new ApiErrorException(406, "Duplicate National ID");
+		}
 		// Auto generate account number
 		req.setAccountNumber(generateAccountNumber());
 		req.setBalance(BigDecimal.valueOf(50));
@@ -94,7 +97,7 @@ public class AccountServiceImpl implements AccountService {
 		account.deposit(req.amount());
 		// Save to transaction
 		var depositTran = new TransactionReqDto(
-				null, TransactionTypeEnum.DEPOSIT, req.amount(), account.getAccountNumber(), null, null
+				null, TransactionTypeEnum.DEPOSIT, req.amount(), account.getAccountNumber(), null, null, null
 		);
 		transactionService.createTransaction(depositTran);
 		accountRepository.save(account);
@@ -111,7 +114,7 @@ public class AccountServiceImpl implements AccountService {
 		account.withdraw(req.amount());
 		// Save to transaction
 		var depositTran = new TransactionReqDto(
-				null, TransactionTypeEnum.WITHDRAWAL, req.amount(), account.getAccountNumber(), null, null
+				null, TransactionTypeEnum.WITHDRAWAL, req.amount(), account.getAccountNumber(), null, null, null
 		);
 		transactionService.createTransaction(depositTran);
 		accountRepository.save(account);

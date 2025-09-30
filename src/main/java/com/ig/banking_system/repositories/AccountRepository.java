@@ -11,6 +11,7 @@ import java.util.Optional;
 @Repository
 public interface AccountRepository extends BaseRepository<Account> {
 	Boolean existsByAccountNumberAndStatusTrue(String accountNumber);
+	Boolean existsByNationalIdAndStatusTrue(String nationalId);
 	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	Optional<Account> findByAccountNumberAndStatusTrue(String accountNumber);
 }

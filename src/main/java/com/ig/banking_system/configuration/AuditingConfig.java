@@ -31,7 +31,6 @@ public class AuditingConfig implements AuditorAware<Users> {
 		if (auth == null || !auth.isAuthenticated() || auth instanceof AnonymousAuthenticationToken) {
 			return Optional.empty();
 		}
-		log.info("Current user: {}", auth.getPrincipal());
 		final var userPrincipal = (Context) auth.getPrincipal();
 		return Optional.of(new Users(userPrincipal.getId(), userPrincipal.getUsername()));
 	}
@@ -41,7 +40,7 @@ public class AuditingConfig implements AuditorAware<Users> {
 		if (auth == null || !auth.isAuthenticated() || auth instanceof AnonymousAuthenticationToken) {
 			return Optional.empty();
 		}
-		final var userPrincipal = (UserPrinciple) auth.getPrincipal();
+		final var userPrincipal = (Context) auth.getPrincipal();
 		return Optional.of(new Users(userPrincipal.getId(), userPrincipal.getUsername()));
 	}
 }

@@ -36,7 +36,7 @@ public class TransferServiceImpl implements TransferService {
 			accountRepo.save(toAcc);
 			// Create Transaction
 			var transferTran = new TransactionReqDto(
-					null, TransactionTypeEnum.TRANSFER, req.amount(), null, fromAcc.getAccountNumber(), toAcc.getAccountNumber()
+					null, TransactionTypeEnum.TRANSFER, req.amount(), null, fromAcc.getAccountNumber(), toAcc.getAccountNumber(), null
 			);
 			var tran = transactionService.createTransaction(transferTran);
 			return new TransferResDto(fromAcc.getAccountNumber(), fromAcc.getAccountHolderName(), toAcc.getAccountNumber(), toAcc.getAccountHolderName(), req.amount(), tran.getTransactionDate());

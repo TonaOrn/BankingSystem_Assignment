@@ -1,6 +1,6 @@
 package com.ig.banking_system.configuration;
 
-import com.ig.banking_system.security.AuthorizationFilter;
+import com.ig.banking_system.security.JwtAuthorizationFilter;
 import com.ig.banking_system.security.CustomAccessDeniedHandler;
 import com.ig.banking_system.security.CustomAuthenticationEntryPoint;
 import com.ig.banking_system.utilities.constants.Constant;
@@ -27,9 +27,9 @@ public class WebSecurityConfig {
 
 		private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 		private final CustomAccessDeniedHandler accessDeniedHandler;
-		private final AuthorizationFilter authorizationFilter;
+		private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
-		List<String> whiteListEndpoint = List.of(Constant.MAIN_PATH + "/auth/login");
+		List<String> whiteListEndpoint = List.of(Constant.MAIN_PATH + "/auth/login", "/api-docs/**", "/swagger-ui/**");
 
 		@Bean
 		public PasswordEncoder bCryptPasswordEncoder() {
@@ -49,7 +49,7 @@ public class WebSecurityConfig {
 												exception -> exception.authenticationEntryPoint(authenticationEntryPoint)
 																.accessDeniedHandler(accessDeniedHandler)
 								)
-								.addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class)
+								.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
 								.httpBasic(AbstractHttpConfigurer::disable)
 								.formLogin(AbstractHttpConfigurer::disable);
 				return http.build();

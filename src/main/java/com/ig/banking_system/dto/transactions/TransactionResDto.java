@@ -1,7 +1,8 @@
 package com.ig.banking_system.dto.transactions;
 
 import com.ig.banking_system.dto.enumerates.TransactionTypeEnum;
-import com.ig.banking_system.model.Transactions;
+import com.ig.banking_system.dto.previlleges.UserDto;
+import com.ig.banking_system.dto.previlleges.UserViewDto;
 import com.ig.banking_system.model.previlleges.Users;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,16 +16,14 @@ import java.util.Date;
 @Getter
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class TransactionReqDto {
+public class TransactionResDto {
+	private Long id;
 	private String transactionRef;
 	private TransactionTypeEnum transactionType;
 	private BigDecimal amount;
 	private String accountNumber;
 	private String fromAccountNumber;
 	private String toAccountNumber;
-	private Users processBy;
-
-	public Transactions toTransaction() {
-		return new Transactions(null, transactionRef, transactionType, amount, accountNumber, fromAccountNumber, toAccountNumber, new Date(), processBy);
-	}
+	private Date transactionDate;
+	private UserViewDto processBy;
 }

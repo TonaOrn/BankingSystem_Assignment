@@ -25,6 +25,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleApiErrorException(ApiErrorException ex) {
         HashMap<String, Object> map = new LinkedHashMap<>();
         map.put("response", new ResponseMessage(ex.getCode(), ex.getMessage()));
+		log.error("==> Error: ", ex);
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
 

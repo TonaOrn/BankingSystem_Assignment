@@ -1,6 +1,7 @@
 package com.ig.banking_system.model;
 
 import com.ig.banking_system.dto.enumerates.TransactionTypeEnum;
+import com.ig.banking_system.dto.transactions.TransactionResDto;
 import com.ig.banking_system.model.previlleges.Users;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -37,4 +38,8 @@ public class Transactions {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "process_by")
 	private Users processBy;
+
+	public TransactionResDto toTransactionResDto() {
+		return new TransactionResDto(id, transactionRef, transactionType, amount, accountNumber, fromAccountNumber, toAccountNumber, transactionDate, processBy.toUserViewDto());
+	}
 }

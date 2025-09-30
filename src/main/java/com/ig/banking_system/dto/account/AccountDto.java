@@ -20,7 +20,7 @@ public class AccountDto {
 	private String accountHolderName;
 	@Email(message = "not a valid email format")
 	private String accountHolderEmail;
-	@Pattern(regexp = "\\d+")
+	@Pattern(regexp = "\\d+", message = "accept only number")
 	private String accountHolderPhone;
 	private String nationalId;
 	private AccountTypeEnum accountType;

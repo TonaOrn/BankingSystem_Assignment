@@ -27,7 +27,7 @@ public class AuthController {
 		return new ObjectResponse<>(userService.login(req));
 	}
 
-	@PreAuthorize("hasAuthority('CREATE_USER')")
+	@PreAuthorize("hasAuthority('CREATE_USER') or hasAuthority('MANAGE_USER')")
 	@PostMapping("/register")
 	public ObjectResponse<RegisterUserDto> registerUser(@Valid @RequestBody UserDto req) {
 		return new ObjectResponse<>(userService.registerUser(req.toUser()));
