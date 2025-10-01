@@ -14,6 +14,7 @@ import com.ig.banking_system.services.UserService;
 import com.ig.banking_system.utilities.jwt.JwtUtil;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -103,7 +104,7 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findAll((root, cq, cb) -> {
 			ArrayList<Predicate> predicates = new ArrayList<>();
 
-			if (!query.isBlank()) {
+			if (!StringUtils.isBlank(query)) {
 				var searchUsername = cb.like(cb.upper(root.get("username")), "%" + query.toUpperCase() + "%");
 				var searchEmail = cb.like(cb.upper(root.get("email")), "%" + query.toUpperCase() + "%");
 				predicates.add(cb.or(searchUsername, searchEmail));
