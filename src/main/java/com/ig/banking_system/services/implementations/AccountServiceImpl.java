@@ -41,7 +41,7 @@ public class AccountServiceImpl implements AccountService {
 		}
 		// Auto generate account number
 		req.setAccountNumber(generateAccountNumber());
-		req.setBalance(BigDecimal.valueOf(50));
+//		req.setBalance(BigDecimal.valueOf(50));
 		req.setActive(true);
 		final var account = accountRepository.save(req);
 		return account.toAccountView();
