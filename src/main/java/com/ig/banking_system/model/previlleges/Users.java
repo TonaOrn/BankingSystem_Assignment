@@ -48,7 +48,7 @@ public class Users extends BaseEntity {
 	}
 
 	public UserListDto toUserListDto() {
-		return new UserListDto(id, firstName, lastName, username, email);
+		return new UserListDto(id, firstName, lastName, username, email, role.getName());
 	}
 
 	public UserViewDto toUserViewDto() {
