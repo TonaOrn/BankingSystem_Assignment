@@ -1,4 +1,4 @@
-# 💸 online-banking-system-project
+# 💸 Banking System Project
 
 ---
 
